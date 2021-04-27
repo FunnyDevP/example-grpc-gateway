@@ -1,0 +1,32 @@
+syntax = "proto3";
+package proto;
+option go_package = "github.com/FunnyDevP/example-grpc-gateway/api/proto";
+
+import "google/api/annotations.proto";
+
+service TodolistService {
+    rpc CreateTodolist(CreateTodolistRequest) returns(CreateTodolistResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/todolist"
+            body: "*"
+        };
+    }
+}
+
+message CreateTodolistRequest {
+    string title = 1;
+    string description = 2;
+    string status = 3;
+    string created_date = 4;
+}
+
+message CreateTodolistResponse {
+    TodolistResponseData data = 1;
+}
+
+message TodolistResponseData {
+    string id = 1;
+    string description = 2;
+    string status = 3;
+    string created_date = 4;
+}
