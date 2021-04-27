@@ -6,10 +6,10 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/grpc"
 	tdlpb "github.com/FunnyDevP/example-grpc-gateway/api/proto/todolist"
 	"github.com/FunnyDevP/example-grpc-gateway/internal/todolist"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
 )
 
 func main() {

@@ -1,6 +1,6 @@
 syntax = "proto3";
 package proto;
-option go_package = "github.com/FunnyDevP/example-grpc-gateway/api/proto";
+option go_package = "github.com/FunnyDevP/example-grpc-gateway/api/proto/todolist";
 
 import "google/api/annotations.proto";
 

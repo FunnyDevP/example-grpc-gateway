@@ -2,6 +2,7 @@
 2. clone repo https://github.com/googleapis/googleapis and copy some dependencies into our proto file structure.
 2. generate *.pb, *_grpc.pb.go and *.pb.gw.go
 
+**using protoc**
 ```
    protoc -I ./api/proto \ 
    
@@ -12,4 +13,9 @@
    --grpc-gateway_out ./api/proto --grpc-gateway_opt paths=source_relative \
    
    ./api/proto/todolist/todolist.proto
+```
+**using buf**
+```
+ buf generate --template scripts/proto/todolist.gen.yaml --path api/proto/todolist/todolist.proto
+
 ```
