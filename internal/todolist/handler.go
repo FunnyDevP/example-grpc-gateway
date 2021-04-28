@@ -3,10 +3,13 @@ package todolist
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
 	tdlpb "github.com/FunnyDevP/example-grpc-gateway/api/proto/todolist"
 	"github.com/rs/xid"
+	"google.golang.org/grpc"
 )
 
 var s = make([]*tdlpb.TodolistResponseData, 0)
@@ -32,15 +35,17 @@ func (h handler) CreateTodolist(ctx context.Context, in *tdlpb.CreateTodolistReq
 	}
 	s = append(s, resp.Data)
 
+	setHttpStatusCode(ctx, http.StatusCreated)
 	return &resp, nil
 }
 
 func (h handler) ListTodolist(ctx context.Context, in *tdlpb.ListTodolistRequest) (*tdlpb.ListTodolistResponse, error) {
+	setHttpStatusCode(ctx, http.StatusOK)
 	return &tdlpb.ListTodolistResponse{Data: s}, nil
 }
 
 func (h handler) EditTodolist(ctx context.Context, in *tdlpb.EditTodolistRequest) (*tdlpb.EditTodolistResponse, error) {
-	var data *tdlpb.TodolistResponseData
+	data := new(tdlpb.TodolistResponseData)
 	for _, rs := range s {
 		if in.TodolistId == rs.Id {
 			rs.Title = in.TodolistBody.Title
@@ -51,5 +56,12 @@ func (h handler) EditTodolist(ctx context.Context, in *tdlpb.EditTodolistRequest
 			break
 		}
 	}
+	setHttpStatusCode(ctx, http.StatusOK)
 	return &tdlpb.EditTodolistResponse{Data: data}, nil
+}
+
+func setHttpStatusCode(ctx context.Context, sc int) {
+	_ = grpc.SetHeader(ctx, map[string][]string{
+		"x-http-code": {strconv.Itoa(sc)},
+	})
 }
