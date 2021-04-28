@@ -16,6 +16,12 @@ service TodolistService {
             get: "/api/v1/todolists"
         };
     }
+    rpc EditTodolist(EditTodolistRequest) returns(EditTodolistResponse) {
+        option (google.api.http) = {
+            put: "/api/v1/todolists/{todolist_id}"
+            body: "todolist_body"
+        };
+    }
 }
 
 message CreateTodolistRequest {
@@ -36,6 +42,23 @@ message ListTodolistRequest {
 message ListTodolistResponse {
     repeated TodolistResponseData data = 1;
 }
+
+message EditTodolistRequest {
+    string todolist_id = 1;
+    TodolistData todolist_body = 2;
+}
+
+message EditTodolistResponse {
+    TodolistResponseData data = 1;
+}
+
+message TodolistData {
+    string title = 1;
+    string description = 2;
+    string status = 3;
+    string created_date = 4;
+}
+
 message TodolistResponseData {
     string id = 1;
     string title = 2;
@@ -43,3 +66,4 @@ message TodolistResponseData {
     string status = 4;
     string created_date = 5;
 }
+

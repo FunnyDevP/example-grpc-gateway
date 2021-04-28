@@ -38,3 +38,18 @@ func (h handler) CreateTodolist(ctx context.Context, in *tdlpb.CreateTodolistReq
 func (h handler) ListTodolist(ctx context.Context, in *tdlpb.ListTodolistRequest) (*tdlpb.ListTodolistResponse, error) {
 	return &tdlpb.ListTodolistResponse{Data: s}, nil
 }
+
+func (h handler) EditTodolist(ctx context.Context, in *tdlpb.EditTodolistRequest) (*tdlpb.EditTodolistResponse, error) {
+	var data *tdlpb.TodolistResponseData
+	for _, rs := range s {
+		if in.TodolistId == rs.Id {
+			rs.Title = in.TodolistBody.Title
+			rs.Description = in.TodolistBody.Description
+			rs.Status = in.TodolistBody.Status
+			rs.CreatedDate = in.TodolistBody.CreatedDate
+			data = rs
+			break
+		}
+	}
+	return &tdlpb.EditTodolistResponse{Data: data}, nil
+}

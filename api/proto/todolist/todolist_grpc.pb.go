@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type TodolistServiceClient interface {
 	CreateTodolist(ctx context.Context, in *CreateTodolistRequest, opts ...grpc.CallOption) (*CreateTodolistResponse, error)
 	ListTodolist(ctx context.Context, in *ListTodolistRequest, opts ...grpc.CallOption) (*ListTodolistResponse, error)
+	EditTodolist(ctx context.Context, in *EditTodolistRequest, opts ...grpc.CallOption) (*EditTodolistResponse, error)
 }
 
 type todolistServiceClient struct {
@@ -48,12 +49,22 @@ func (c *todolistServiceClient) ListTodolist(ctx context.Context, in *ListTodoli
 	return out, nil
 }
 
+func (c *todolistServiceClient) EditTodolist(ctx context.Context, in *EditTodolistRequest, opts ...grpc.CallOption) (*EditTodolistResponse, error) {
+	out := new(EditTodolistResponse)
+	err := c.cc.Invoke(ctx, "/proto.TodolistService/EditTodolist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TodolistServiceServer is the server API for TodolistService service.
 // All implementations must embed UnimplementedTodolistServiceServer
 // for forward compatibility
 type TodolistServiceServer interface {
 	CreateTodolist(context.Context, *CreateTodolistRequest) (*CreateTodolistResponse, error)
 	ListTodolist(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error)
+	EditTodolist(context.Context, *EditTodolistRequest) (*EditTodolistResponse, error)
 	mustEmbedUnimplementedTodolistServiceServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedTodolistServiceServer) CreateTodolist(context.Context, *Creat
 }
 func (UnimplementedTodolistServiceServer) ListTodolist(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTodolist not implemented")
+}
+func (UnimplementedTodolistServiceServer) EditTodolist(context.Context, *EditTodolistRequest) (*EditTodolistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditTodolist not implemented")
 }
 func (UnimplementedTodolistServiceServer) mustEmbedUnimplementedTodolistServiceServer() {}
 
@@ -116,6 +130,24 @@ func _TodolistService_ListTodolist_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TodolistService_EditTodolist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditTodolistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodolistServiceServer).EditTodolist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.TodolistService/EditTodolist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodolistServiceServer).EditTodolist(ctx, req.(*EditTodolistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TodolistService_ServiceDesc is the grpc.ServiceDesc for TodolistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var TodolistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListTodolist",
 			Handler:    _TodolistService_ListTodolist_Handler,
+		},
+		{
+			MethodName: "EditTodolist",
+			Handler:    _TodolistService_EditTodolist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
