@@ -7,8 +7,13 @@ import "google/api/annotations.proto";
 service TodolistService {
     rpc CreateTodolist(CreateTodolistRequest) returns(CreateTodolistResponse) {
         option (google.api.http) = {
-            post: "/api/v1/todolist"
+            post: "/api/v1/todolists"
             body: "*"
+        };
+    }
+    rpc ListTodolist(ListTodolistRequest) returns(ListTodolistResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/todolists"
         };
     }
 }
@@ -24,9 +29,17 @@ message CreateTodolistResponse {
     TodolistResponseData data = 1;
 }
 
+message ListTodolistRequest {
+
+}
+
+message ListTodolistResponse {
+    repeated TodolistResponseData data = 1;
+}
 message TodolistResponseData {
     string id = 1;
-    string description = 2;
-    string status = 3;
-    string created_date = 4;
+    string title = 2;
+    string description = 3;
+    string status = 4;
+    string created_date = 5;
 }
