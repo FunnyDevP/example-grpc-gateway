@@ -11,6 +11,12 @@ service TodolistService {
             body: "*"
         };
     }
+
+    rpc ListTodoList(ListTodolistRequest) returns(ListTodolistResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/todolists"
+        };
+    }
 }
 
 message CreateTodolistRequest {
@@ -22,6 +28,14 @@ message CreateTodolistRequest {
 
 message CreateTodolistResponse {
     TodolistResponseData data = 1;
+}
+
+message ListTodolistRequest {
+
+}
+
+message ListTodolistResponse {
+    repeated TodolistResponseData data = 1;
 }
 
 message TodolistData {

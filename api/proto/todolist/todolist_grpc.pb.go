@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodolistServiceClient interface {
 	CreateTodolist(ctx context.Context, in *CreateTodolistRequest, opts ...grpc.CallOption) (*CreateTodolistResponse, error)
+	ListTodoList(ctx context.Context, in *ListTodolistRequest, opts ...grpc.CallOption) (*ListTodolistResponse, error)
 }
 
 type todolistServiceClient struct {
@@ -38,11 +39,21 @@ func (c *todolistServiceClient) CreateTodolist(ctx context.Context, in *CreateTo
 	return out, nil
 }
 
+func (c *todolistServiceClient) ListTodoList(ctx context.Context, in *ListTodolistRequest, opts ...grpc.CallOption) (*ListTodolistResponse, error) {
+	out := new(ListTodolistResponse)
+	err := c.cc.Invoke(ctx, "/todolist.TodolistService/ListTodoList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TodolistServiceServer is the server API for TodolistService service.
 // All implementations must embed UnimplementedTodolistServiceServer
 // for forward compatibility
 type TodolistServiceServer interface {
 	CreateTodolist(context.Context, *CreateTodolistRequest) (*CreateTodolistResponse, error)
+	ListTodoList(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error)
 	mustEmbedUnimplementedTodolistServiceServer()
 }
 
@@ -52,6 +63,9 @@ type UnimplementedTodolistServiceServer struct {
 
 func (UnimplementedTodolistServiceServer) CreateTodolist(context.Context, *CreateTodolistRequest) (*CreateTodolistResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTodolist not implemented")
+}
+func (UnimplementedTodolistServiceServer) ListTodoList(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTodoList not implemented")
 }
 func (UnimplementedTodolistServiceServer) mustEmbedUnimplementedTodolistServiceServer() {}
 
@@ -84,6 +98,24 @@ func _TodolistService_CreateTodolist_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TodolistService_ListTodoList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTodolistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodolistServiceServer).ListTodoList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/todolist.TodolistService/ListTodoList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodolistServiceServer).ListTodoList(ctx, req.(*ListTodolistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TodolistService_ServiceDesc is the grpc.ServiceDesc for TodolistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,6 +126,10 @@ var TodolistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTodolist",
 			Handler:    _TodolistService_CreateTodolist_Handler,
+		},
+		{
+			MethodName: "ListTodoList",
+			Handler:    _TodolistService_ListTodoList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

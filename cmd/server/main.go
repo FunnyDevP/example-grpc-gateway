@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"google.golang.org/protobuf/encoding/protojson"
 	"log"
 	"net"
 	"net/http"
@@ -44,10 +45,15 @@ func main() {
 	}
 
 	gwmux := runtime.NewServeMux(
-		runtime.WithForwardResponseOption(httpResponseCodeModifier),
-		runtime.WithErrorHandler(func(ctx context.Context, mux *runtime.ServeMux, marshaller runtime.Marshaler, writer http.ResponseWriter, request *http.Request, err error) {
-
+		runtime.WithMarshalerOption(runtime.MIMEWildcard,&runtime.JSONPb{
+			MarshalOptions: protojson.MarshalOptions{
+				UseProtoNames: true,
+			},
 		}),
+		runtime.WithIncomingHeaderMatcher(func(s string) (string, bool) {
+			return s,true
+		}),
+		runtime.WithForwardResponseOption(httpResponseCodeModifier),
 	)
 
 	// register http handler

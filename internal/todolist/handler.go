@@ -22,6 +22,7 @@ func NewHandler() *handler {
 }
 
 func (h handler) CreateTodolist(ctx context.Context, in *tdlpb.CreateTodolistRequest) (*tdlpb.CreateTodolistResponse, error) {
+
 	resp := tdlpb.CreateTodolistResponse{
 		Data: &tdlpb.TodolistResponseData{
 			Title:       in.Title,
@@ -37,6 +38,11 @@ func (h handler) CreateTodolist(ctx context.Context, in *tdlpb.CreateTodolistReq
 	return &resp, nil
 }
 
+
+func (h handler) ListTodoList(ctx context.Context, in *tdlpb.ListTodolistRequest) (*tdlpb.ListTodolistResponse, error)  {
+	setHttpStatusCode(ctx, http.StatusOK)
+	return &tdlpb.ListTodolistResponse{Data: s}, nil
+}
 func setHttpStatusCode(ctx context.Context, sc int) {
 	_ = grpc.SetHeader(ctx, map[string][]string{
 		"x-http-code": {strconv.Itoa(sc)},
