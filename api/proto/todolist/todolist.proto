@@ -1,5 +1,5 @@
 syntax = "proto3";
-package proto;
+package todolist;
 option go_package = "github.com/FunnyDevP/example-grpc-gateway/api/proto/todolist";
 
 import "google/api/annotations.proto";
@@ -9,17 +9,6 @@ service TodolistService {
         option (google.api.http) = {
             post: "/api/v1/todolists"
             body: "*"
-        };
-    }
-    rpc ListTodolist(ListTodolistRequest) returns(ListTodolistResponse) {
-        option (google.api.http) = {
-            get: "/api/v1/todolists"
-        };
-    }
-    rpc EditTodolist(EditTodolistRequest) returns(EditTodolistResponse) {
-        option (google.api.http) = {
-            put: "/api/v1/todolists/{todolist_id}"
-            body: "todolist_body"
         };
     }
 }
@@ -32,23 +21,6 @@ message CreateTodolistRequest {
 }
 
 message CreateTodolistResponse {
-    TodolistResponseData data = 1;
-}
-
-message ListTodolistRequest {
-
-}
-
-message ListTodolistResponse {
-    repeated TodolistResponseData data = 1;
-}
-
-message EditTodolistRequest {
-    string todolist_id = 1;
-    TodolistData todolist_body = 2;
-}
-
-message EditTodolistResponse {
     TodolistResponseData data = 1;
 }
 

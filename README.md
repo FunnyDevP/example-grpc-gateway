@@ -19,3 +19,4 @@
  buf generate --template scripts/proto/todolist.gen.yaml --path api/proto/todolist/todolist.proto
 
 ```
+

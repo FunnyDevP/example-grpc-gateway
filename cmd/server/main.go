@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	tdlpb "github.com/FunnyDevP/example-grpc-gateway/api/proto/todolist"
-	"github.com/FunnyDevP/example-grpc-gateway/internal/todolist"
+	td "github.com/FunnyDevP/example-grpc-gateway/internal/todolist"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
@@ -24,7 +24,7 @@ func main() {
 	// Create a gRPC server object
 	s := grpc.NewServer()
 	// Attach the todolist service to the server
-	tdlpb.RegisterTodolistServiceServer(s,todolist.NewHandler())
+	tdlpb.RegisterTodolistServiceServer(s,td.NewHandler())
 	// Serve gRPC server
 	log.Println("Serving gRPC on localhost:8080")
 	go func() {

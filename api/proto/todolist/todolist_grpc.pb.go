@@ -19,8 +19,6 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodolistServiceClient interface {
 	CreateTodolist(ctx context.Context, in *CreateTodolistRequest, opts ...grpc.CallOption) (*CreateTodolistResponse, error)
-	ListTodolist(ctx context.Context, in *ListTodolistRequest, opts ...grpc.CallOption) (*ListTodolistResponse, error)
-	EditTodolist(ctx context.Context, in *EditTodolistRequest, opts ...grpc.CallOption) (*EditTodolistResponse, error)
 }
 
 type todolistServiceClient struct {
@@ -33,25 +31,7 @@ func NewTodolistServiceClient(cc grpc.ClientConnInterface) TodolistServiceClient
 
 func (c *todolistServiceClient) CreateTodolist(ctx context.Context, in *CreateTodolistRequest, opts ...grpc.CallOption) (*CreateTodolistResponse, error) {
 	out := new(CreateTodolistResponse)
-	err := c.cc.Invoke(ctx, "/proto.TodolistService/CreateTodolist", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *todolistServiceClient) ListTodolist(ctx context.Context, in *ListTodolistRequest, opts ...grpc.CallOption) (*ListTodolistResponse, error) {
-	out := new(ListTodolistResponse)
-	err := c.cc.Invoke(ctx, "/proto.TodolistService/ListTodolist", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *todolistServiceClient) EditTodolist(ctx context.Context, in *EditTodolistRequest, opts ...grpc.CallOption) (*EditTodolistResponse, error) {
-	out := new(EditTodolistResponse)
-	err := c.cc.Invoke(ctx, "/proto.TodolistService/EditTodolist", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/todolist.TodolistService/CreateTodolist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +43,6 @@ func (c *todolistServiceClient) EditTodolist(ctx context.Context, in *EditTodoli
 // for forward compatibility
 type TodolistServiceServer interface {
 	CreateTodolist(context.Context, *CreateTodolistRequest) (*CreateTodolistResponse, error)
-	ListTodolist(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error)
-	EditTodolist(context.Context, *EditTodolistRequest) (*EditTodolistResponse, error)
 	mustEmbedUnimplementedTodolistServiceServer()
 }
 
@@ -74,12 +52,6 @@ type UnimplementedTodolistServiceServer struct {
 
 func (UnimplementedTodolistServiceServer) CreateTodolist(context.Context, *CreateTodolistRequest) (*CreateTodolistResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTodolist not implemented")
-}
-func (UnimplementedTodolistServiceServer) ListTodolist(context.Context, *ListTodolistRequest) (*ListTodolistResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListTodolist not implemented")
-}
-func (UnimplementedTodolistServiceServer) EditTodolist(context.Context, *EditTodolistRequest) (*EditTodolistResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EditTodolist not implemented")
 }
 func (UnimplementedTodolistServiceServer) mustEmbedUnimplementedTodolistServiceServer() {}
 
@@ -104,46 +76,10 @@ func _TodolistService_CreateTodolist_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.TodolistService/CreateTodolist",
+		FullMethod: "/todolist.TodolistService/CreateTodolist",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TodolistServiceServer).CreateTodolist(ctx, req.(*CreateTodolistRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TodolistService_ListTodolist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListTodolistRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TodolistServiceServer).ListTodolist(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.TodolistService/ListTodolist",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodolistServiceServer).ListTodolist(ctx, req.(*ListTodolistRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TodolistService_EditTodolist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EditTodolistRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TodolistServiceServer).EditTodolist(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.TodolistService/EditTodolist",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodolistServiceServer).EditTodolist(ctx, req.(*EditTodolistRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -152,20 +88,12 @@ func _TodolistService_EditTodolist_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TodolistService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.TodolistService",
+	ServiceName: "todolist.TodolistService",
 	HandlerType: (*TodolistServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateTodolist",
 			Handler:    _TodolistService_CreateTodolist_Handler,
-		},
-		{
-			MethodName: "ListTodolist",
-			Handler:    _TodolistService_ListTodolist_Handler,
-		},
-		{
-			MethodName: "EditTodolist",
-			Handler:    _TodolistService_EditTodolist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

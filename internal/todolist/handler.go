@@ -2,7 +2,6 @@ package todolist
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -19,7 +18,6 @@ type handler struct {
 }
 
 func NewHandler() *handler {
-	fmt.Println("-------------call handler---------------")
 	return &handler{}
 }
 
@@ -37,27 +35,6 @@ func (h handler) CreateTodolist(ctx context.Context, in *tdlpb.CreateTodolistReq
 
 	setHttpStatusCode(ctx, http.StatusCreated)
 	return &resp, nil
-}
-
-func (h handler) ListTodolist(ctx context.Context, in *tdlpb.ListTodolistRequest) (*tdlpb.ListTodolistResponse, error) {
-	setHttpStatusCode(ctx, http.StatusOK)
-	return &tdlpb.ListTodolistResponse{Data: s}, nil
-}
-
-func (h handler) EditTodolist(ctx context.Context, in *tdlpb.EditTodolistRequest) (*tdlpb.EditTodolistResponse, error) {
-	data := new(tdlpb.TodolistResponseData)
-	for _, rs := range s {
-		if in.TodolistId == rs.Id {
-			rs.Title = in.TodolistBody.Title
-			rs.Description = in.TodolistBody.Description
-			rs.Status = in.TodolistBody.Status
-			rs.CreatedDate = in.TodolistBody.CreatedDate
-			data = rs
-			break
-		}
-	}
-	setHttpStatusCode(ctx, http.StatusOK)
-	return &tdlpb.EditTodolistResponse{Data: data}, nil
 }
 
 func setHttpStatusCode(ctx context.Context, sc int) {
